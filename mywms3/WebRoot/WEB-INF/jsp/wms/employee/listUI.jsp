@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <title>员工管理</title>
+    <title>员工的管理</title>
     <%@include file="/common/header.jsp" %>
     <script type="text/javascript">
       	//全选、全反选

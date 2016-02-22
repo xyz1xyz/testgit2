@@ -12,7 +12,7 @@ public abstract class BaseAction extends ActionSupport {
 	private int pageNo;
 	private int pageSize;
 	//分页显示的数据
-	public static int DEFAULT_PAGE_SIZE = 10;
+	public static int DEFAULT_PAGE_SIZE = 6;
 	public String[] getSelectedRow() {
 		return selectedRow;
 	}
