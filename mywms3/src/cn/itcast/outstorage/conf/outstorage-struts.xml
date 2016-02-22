@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<package name="outstorage-action" namespace="/outstorage" extends="json-default">
+	
+	   <!-- 全局结果 -->
+		<global-results>
+			<result name="json" type="json"/>
+		</global-results>
+		
+		<!-- 根据地域查询仓库-->
+		<action 
+			name="findStorageByLocation" 
+			class="cn.itcast.outstorage.action.OutStorageAction"
+			method="findStorageByLocation">
+		</action>
+		
+		
+		<!-- 根据仓库查询仓位 -->
+		<action 
+			name="findBinByStorage" 
+			class="cn.itcast.outstorage.action.OutStorageAction" 
+			method="findBinByStorage">
+		</action>
+		
+		<!--  根据仓库和仓位查询库存产品列表，看是否有库存 -->
+		<action 
+			name="findMaterials" 
+			class="cn.itcast.outstorage.action.OutStorageAction" 
+			method="findMaterials">
+		</action>
+		
+		<action name="outstorage_*" class="cn.itcast.outstorage.action.OutStorageAction" method="{1}">
+			<result name="{1}">/WEB-INF/jsp/outstorage/{1}.jsp</result>
+			<!-- <result name="listForm" type="redirectAction">
+				<param name="actionName">instorage_formUI</param>
+				
+			</result> -->
+			
+		</action>
+		
+		<action name="form_*" class="cn.itcast.outstorage.action.OutFormAction" method="{1}">
+		   <result name="{1}">/WEB-INF/jsp/outstorage/{1}.jsp</result>
+		</action>
+		
+	
+		
+		
+	
+	
+		
+	</package>
+
+</struts>

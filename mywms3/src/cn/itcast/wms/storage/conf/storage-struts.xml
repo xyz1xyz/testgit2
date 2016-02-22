@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<package name="storage-action" namespace="/wms" extends="struts-default">
+		<action name="storage_*" class="cn.itcast.wms.storage.action.StorageAction" method="{1}">
+			<result name="{1}">/WEB-INF/jsp/wms/storage/{1}.jsp</result>
+			<result name="list" type="redirectAction">
+				<param name="actionName">storage_listUI</param>
+				<param name="pageNo">${pageNo}</param>
+			</result>
+			
+		</action>
+	</package>
+
+</struts>

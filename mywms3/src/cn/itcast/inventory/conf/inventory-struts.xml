@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<package name="inventory-action" namespace="/inventory" extends="struts-default">
+		<action name="inventory_*" class="cn.itcast.inventory.action.InventoryAction" method="{1}">
+			<result name="{1}">/WEB-INF/jsp/inventory/{1}.jsp</result>
+			
+			
+		</action>
+	</package>
+
+</struts>

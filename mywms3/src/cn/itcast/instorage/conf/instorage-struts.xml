@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<package name="instorage-action" namespace="/instorage" extends="json-default">
+	
+	   <!-- 全局结果 -->
+		<global-results>
+			<result name="json" type="json"/>
+		</global-results>
+		
+		<!-- 根据地域查询仓库-->
+		<action 
+			name="findStorageByLocation" 
+			class="cn.itcast.instorage.action.InStorageAction"
+			method="findStorageByLocation">
+		</action>
+		
+		
+		<!-- 根据仓库查询仓位 -->
+		<action 
+			name="findBinByStorage" 
+			class="cn.itcast.instorage.action.InStorageAction" 
+			method="findBinByStorage">
+		</action>
+		<action name="instorage_*" class="cn.itcast.instorage.action.InStorageAction" method="{1}">
+			<result name="{1}">/WEB-INF/jsp/instorage/{1}.jsp</result>
+			<!-- <result name="listForm" type="redirectAction">
+				<param name="actionName">instorage_formUI</param>
+				
+			</result> -->
+			
+		</action>
+		
+		<action name="form_*" class="cn.itcast.instorage.action.FormAction" method="{1}">
+		   <result name="{1}">/WEB-INF/jsp/instorage/{1}.jsp</result>
+		</action>
+		
+	
+		
+		
+	
+	
+		
+	</package>
+
+</struts>
