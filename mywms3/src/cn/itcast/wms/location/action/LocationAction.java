@@ -1,5 +1,6 @@
 package cn.itcast.wms.location.action;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -130,6 +131,39 @@ public class LocationAction extends BaseAction {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		//删除地域的校验
+		public void verifyLocation()
+		{
+			try {
+				QueryHelper query=new QueryHelper(WmsLocation.class,"wl");
+				//query.addCondition("wl.name=?", wmsLocation.getId());
+				//根据id查询地域名
+				WmsLocation location=locationService.findObjectById(wmsLocation.getId());
+				//根据地域名查询仓库表是否有使用上面查到的地域
+				QueryHelper query2=new QueryHelper(WmsStorage.class, "ws");
+				query2.addCondition("ws.address=?", location.getName());
+				List<WmsStorage> list=storageService.findObjects(query2);
+				String strResult="true";
+				if(list!=null&&list.size()>0)
+				{
+					//数据已存在
+					strResult = "false";
+				}
+				//输出
+				HttpServletResponse response = ServletActionContext.getResponse();
+				response.setContentType("text/html");
+				ServletOutputStream outputStream = response.getOutputStream();
+				outputStream.write(strResult.getBytes());
+				outputStream.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    
+			
+			
+			
 		}
 		
 		

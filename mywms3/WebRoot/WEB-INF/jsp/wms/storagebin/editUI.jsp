@@ -54,12 +54,14 @@
         
             <tr>
             <td class="tdBg" width="200px"/> 仓位名：</td>
-            <td><s:textfield id="name"name="storageBin.name"></s:textfield></td>
+            <td><s:textfield id="name" name="storageBin.name"></s:textfield></td>
             </tr>
           
             <input type="text" name="aa" style="display:none"/>
           <td class="tdBg" width="200px">所属地域：</td>
-          <td><s:select list="#storagelist" name="storageBin.storeName" listKey="name" listValue="name"></s:select></td>
+          <td>
+           <s:textfield id="storage" name="storageBin.storeName" readonly="true"></s:textfield>
+          </td>
           </tr>
     </table>
     <s:hidden name="storageBin.id"/>

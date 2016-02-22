@@ -59,7 +59,8 @@
             </tr>
             <tr>
           <td class="tdBg" width="200px">所属地域：</td>
-          <td><s:select list="#locationlist" name="storage.address" listKey="name" listValue="name"></s:select></td>
+          <td><s:textfield  name="storage.address" readonly="true"></s:textfield></td>
+          <!-- <td><s:select list="#locationlist" name="storage.address" listKey="name" listValue="name"></s:select></td> -->
           </tr>
             <input type="text" name="aa" style="display:none"/>
     </table>

@@ -13,11 +13,12 @@ import com.opensymphony.xwork2.ActionContext;
 
 import cn.itcast.base.action.BaseAction;
 import cn.itcast.base.util.QueryHelper;
-
 import cn.itcast.wms.location.entity.WmsLocation;
 import cn.itcast.wms.location.service.LocationService;
 import cn.itcast.wms.storage.entity.WmsStorage;
 import cn.itcast.wms.storage.service.StorageService;
+import cn.itcast.wms.storagebin.entity.WmsStorageBin;
+import cn.itcast.wms.storagebin.service.StorageBinService;
 
 public class StorageAction extends BaseAction {
 
@@ -25,7 +26,10 @@ public class StorageAction extends BaseAction {
 	private StorageService storageService;
 	@Resource
 	private LocationService locationService;
+	@Resource
+	private StorageBinService storageBinService;
 	private WmsStorage storage;
+	private WmsStorageBin storageBin;
 	
 
 	//列表页面
@@ -136,7 +140,37 @@ public class StorageAction extends BaseAction {
 					}
 				}
 				
-			
+			//删除仓库校验
+				public void verifyStorage()
+				{
+					try {
+						QueryHelper query=new QueryHelper(WmsStorage.class,"ws");
+						//query.addCondition("wl.name=?", wmsLocation.getId());
+						//根据id查询仓库名
+						WmsStorage st=storageService.findObjectById(storage.getId());
+						//根据地域名查询仓位表是否有使用上面查到的仓库名
+						QueryHelper query2=new QueryHelper(WmsStorageBin.class, "wsb");
+						query2.addCondition("wsb.storeName=?", st.getName());
+						List<WmsStorageBin> list=storageBinService.findObjects(query2);
+						
+						String strResult="true";
+						if(list!=null&&list.size()>0)
+						{
+							//数据已存在
+							strResult = "false";
+						}
+						//输出
+						HttpServletResponse response = ServletActionContext.getResponse();
+						response.setContentType("text/html");
+						ServletOutputStream outputStream = response.getOutputStream();
+						outputStream.write(strResult.getBytes());
+						outputStream.close();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				    
+				}
 			
 
 	public WmsStorage getStorage() {
@@ -144,6 +178,14 @@ public class StorageAction extends BaseAction {
 	}
 	public void setStorage(WmsStorage storage) {
 		this.storage = storage;
+	}
+
+	public WmsStorageBin getStorageBin() {
+		return storageBin;
+	}
+
+	public void setStorageBin(WmsStorageBin storageBin) {
+		this.storageBin = storageBin;
 	}
 	
 }

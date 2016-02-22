@@ -61,6 +61,11 @@ public class QueryHelper {
 			orderByClause = " ORDER BY " + property + " " + order;
 		}
 	}
+	
+	/**
+	 * 多表查询
+	 * @return
+	 */
 
 	//查询hql语句
 	public String getQueryListHql(){

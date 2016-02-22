@@ -19,14 +19,63 @@
       	}
       	//编辑
       	function doEdit(id){
+      	 result=false;
+      	    $.ajax({
+      	      url:"${basePath}wms/location_verifyLocation.action",
+      	      data:{"wmsLocation.id":id},
+      	      type:"post",
+      	      async: false,//非异步,执行完这个ajax请求之后才能执行下面的提交请求
+      	      success:function(msg)
+      	      { 
+      	         
+      	        if("true"!=msg)
+      	        {
+      	         alert(msg);
+      	          alert("该地域已被使用，不能编辑");
+      	          result=false;
+      	        }
+      	        else{
+      	         result=true;
+      	           
+      	        }
+      	      }
+      	    
+      	    });
+      	  
+      	    if(result){
       		document.forms[0].action = "${basePath}wms/location_editUI.action?wmsLocation.id=" + id;
       		document.forms[0].submit();
+      		}
       	}
       	//删除
       	function doDelete(id){
-      	
+      	    result=false;
+      	    $.ajax({
+      	      url:"${basePath}wms/location_verifyLocation.action",
+      	      data:{"wmsLocation.id":id},
+      	      type:"post",
+      	      async: false,//非异步,执行完这个ajax请求之后才能执行下面的提交请求
+      	      success:function(msg)
+      	      { 
+      	         
+      	        if("true"!=msg)
+      	        {
+      	          alert("该地域已被使用，不能删除");
+      	          result=false;
+      	        }
+      	        else{
+      	         result=true;
+      	           
+      	        }
+      	      }
+      	    
+      	    });
+      	  
+      	    if(result){
+      	    
       		document.forms[0].action = "${basePath}wms/location_delete.action?wmsLocation.id=" + id;
       		document.forms[0].submit();
+      		}
       	}
       	//批量删除
       	function doDeleteAll(){
@@ -58,8 +107,6 @@
                     <li style="float:right;">
                         <input type="button" value="新增" class="s_button" onclick="doAdd()"/>&nbsp;
                         <input type="button" value="删除" class="s_button" onclick="doDeleteAll()"/>&nbsp;
-                       
-
                     </li>
                 </div>
 
@@ -78,8 +125,8 @@
                                 <td align="center"><s:property value="name"/></td>
                                
                                 <td align="center">
-                                    <a href="javascript:doEdit('<s:property value='id'/>')">编辑</a>
-                                    <a href="javascript:doDelete('<s:property value='id'/>')">删除</a>
+                                    <a href="javascript:doEdit('<s:property  value='id'/>')">编辑</a>
+                                    <a href="javascript:doDelete('<s:property  value='id'/>')">删除</a>
                                 </td>
                             </tr>
                         </s:iterator>

@@ -16,13 +16,62 @@
       	}
       	//编辑
       	function doEdit(id){
+      	result=false;
+      	    $.ajax({
+      	      url:"${basePath}wms/storagebin_verifyStorageBin.action",
+      	      data:{"storageBin.id":id},
+      	      type:"post",
+      	      async: false,//非异步,执行完这个ajax请求之后才能执行下面的提交请求
+      	      success:function(msg)
+      	      { 
+      	         
+      	        if("true"!=msg)
+      	        {
+      	          alert("该仓位已被使用，不能编辑");
+      	          result=false;
+      	        }
+      	        else{
+      	         result=true;
+      	           
+      	        }
+      	      }
+      	    
+      	    });
+      	  
+      	    if(result){
       		document.forms[0].action = "${basePath}wms/storagebin_editUI.action?storageBin.id=" + id;
       		document.forms[0].submit();
+      		}
       	}
       	//删除
       	function doDelete(id){
+      	     result=false;
+      	    $.ajax({
+      	      url:"${basePath}wms/storagebin_verifyStorageBin.action",
+      	      data:{"storageBin.id":id},
+      	      type:"post",
+      	      async: false,//非异步,执行完这个ajax请求之后才能执行下面的提交请求
+      	      success:function(msg)
+      	      { 
+      	         
+      	        if("true"!=msg)
+      	        {
+      	          alert("该仓位已被使用，不能删除");
+      	          result=false;
+      	        }
+      	        else{
+      	         result=true;
+      	           
+      	        }
+      	      }
+      	    
+      	    });
+      	  
+      	    if(result){
+      	    
       		document.forms[0].action = "${basePath}wms/storagebin_delete.action?storageBin.id=" + id;
       		document.forms[0].submit();
+      		}
       	}
       	//批量删除
       	function doDeleteAll(){

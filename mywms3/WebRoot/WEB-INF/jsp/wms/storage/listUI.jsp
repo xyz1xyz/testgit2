@@ -19,13 +19,62 @@
       	}
       	//编辑
       	function doEdit(id){
+      	   result=false;
+      	    $.ajax({
+      	      url:"${basePath}wms/storage_verifyStorage.action",
+      	      data:{"storage.id":id},
+      	      type:"post",
+      	      async: false,//非异步,执行完这个ajax请求之后才能执行下面的提交请求
+      	      success:function(msg)
+      	      { 
+      	         
+      	        if("true"!=msg)
+      	        {
+      	          alert("该仓库已被使用，不能编辑");
+      	          result=false;
+      	        }
+      	        else{
+      	         result=true;
+      	           
+      	        }
+      	      }
+      	    
+      	    });
+      	  
+      	    if(result){
       		document.forms[0].action = "${basePath}wms/storage_editUI.action?storage.id=" + id;
       		document.forms[0].submit();
+      		}
       	}
       	//删除
       	function doDelete(id){
+      	 result=false;
+      	    $.ajax({
+      	      url:"${basePath}wms/storage_verifyStorage.action",
+      	      data:{"storage.id":id},
+      	      type:"post",
+      	      async: false,//非异步,执行完这个ajax请求之后才能执行下面的提交请求
+      	      success:function(msg)
+      	      { 
+      	         
+      	        if("true"!=msg)
+      	        {
+      	          alert("该仓库已被使用，不能删除");
+      	          result=false;
+      	        }
+      	        else{
+      	         result=true;
+      	           
+      	        }
+      	      }
+      	    
+      	    });
+      	  
+      	    if(result){
       		document.forms[0].action = "${basePath}wms/storage_delete.action?storage.id=" + id;
       		document.forms[0].submit();
+      		}
+      		
       	}
       	//批量删除
       	function doDeleteAll(){
@@ -75,7 +124,6 @@
                                 <td align="center"><input type="checkbox" name="selectedRow" value="<s:property value='id'/>" /></td>
                                 <td align="center"><s:property value="name"/></td>
                                 <td align="center"><s:property value="address"/></td>
-                               
                                 <td align="center">
                                     <a href="javascript:doEdit('<s:property value='id'/>')">编辑</a>
                                     <a href="javascript:doDelete('<s:property value='id'/>')">删除</a>

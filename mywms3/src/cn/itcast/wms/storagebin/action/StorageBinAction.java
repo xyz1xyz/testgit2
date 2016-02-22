@@ -13,6 +13,9 @@ import com.opensymphony.xwork2.ActionContext;
 
 import cn.itcast.base.action.BaseAction;
 import cn.itcast.base.util.QueryHelper;
+import cn.itcast.instorage.entity.WmsFormDetail;
+import cn.itcast.instorage.service.WmsFormDetailService;
+import cn.itcast.wms.location.entity.WmsLocation;
 import cn.itcast.wms.material.entity.WmsMaterial;
 import cn.itcast.wms.storage.entity.WmsStorage;
 import cn.itcast.wms.storage.service.StorageService;
@@ -25,6 +28,9 @@ public class StorageBinAction extends BaseAction {
 	private StorageBinService storageBinService;
 	@Resource
 	private StorageService storageService;
+	@Resource
+	private WmsFormDetailService formDetailService;
+	private WmsFormDetail formDetail;
 	private WmsStorageBin storageBin;
 
 	// 列表页面
@@ -128,6 +134,7 @@ public class StorageBinAction extends BaseAction {
 			if(storageBin != null && StringUtils.isNotBlank(storageBin.getName())){
 				//根据仓库和仓位查询
 				QueryHelper query=new QueryHelper(WmsStorageBin.class,"wl");
+				
 				query.addCondition("wl.name=?", storageBin.getName());
 				query.addCondition("wl.storeName=?", storageBin.getStoreName());
 				List<WmsStorageBin> list=storageBinService.findObjects(query);
@@ -149,6 +156,39 @@ public class StorageBinAction extends BaseAction {
 			e.printStackTrace();
 		}
 	}
+	//检验仓位名是否放了货物，若放不给删除。
+	public void verifyStorageBin()
+	{
+		//思路：根据id查询仓位名，再到单据明细表查询仓位名是否使用
+		try {
+			QueryHelper query=new QueryHelper(WmsStorageBin.class,"wsb");
+			//query.addCondition("wl.name=?", wmsLocation.getId());
+			//根据id查询仓位名
+			WmsStorageBin sb=storageBinService.findObjectById(storageBin.getId());
+			//到单据明细表查询仓位名是否使用
+			QueryHelper query2=new QueryHelper(WmsFormDetail.class, "wfd");
+			query2.addCondition("wfd.instorageBinName=?", sb.getName());
+		
+			List<WmsFormDetail> list=formDetailService.findObjects(query2);
+			
+			String strResult="true";
+			if(list!=null&&list.size()>0)
+			{
+				//数据已存在
+				strResult = "false";
+			}
+			//输出
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setContentType("text/html");
+			ServletOutputStream outputStream = response.getOutputStream();
+			outputStream.write(strResult.getBytes());
+			outputStream.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+	}
 
 	public WmsStorageBin getStorageBin() {
 		return storageBin;
@@ -156,6 +196,14 @@ public class StorageBinAction extends BaseAction {
 
 	public void setStorageBin(WmsStorageBin storageBin) {
 		this.storageBin = storageBin;
+	}
+
+	public WmsFormDetail getFormDetail() {
+		return formDetail;
+	}
+
+	public void setFormDetail(WmsFormDetail formDetail) {
+		this.formDetail = formDetail;
 	}
 
 }
