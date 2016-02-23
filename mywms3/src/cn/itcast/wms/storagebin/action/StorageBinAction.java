@@ -13,8 +13,13 @@ import com.opensymphony.xwork2.ActionContext;
 
 import cn.itcast.base.action.BaseAction;
 import cn.itcast.base.util.QueryHelper;
+import cn.itcast.instorage.entity.WmsForm;
 import cn.itcast.instorage.entity.WmsFormDetail;
+import cn.itcast.instorage.entity.WmsInventory;
+import cn.itcast.instorage.entity.WmsInventoryBin;
 import cn.itcast.instorage.service.WmsFormDetailService;
+import cn.itcast.instorage.service.WmsInventoryBinService;
+import cn.itcast.instorage.service.WmsInventoryService;
 import cn.itcast.wms.location.entity.WmsLocation;
 import cn.itcast.wms.material.entity.WmsMaterial;
 import cn.itcast.wms.storage.entity.WmsStorage;
@@ -30,9 +35,13 @@ public class StorageBinAction extends BaseAction {
 	private StorageService storageService;
 	@Resource
 	private WmsFormDetailService formDetailService;
+	@Resource
+	private WmsInventoryBinService inventoryBinService;
 	private WmsFormDetail formDetail;
 	private WmsStorageBin storageBin;
-
+	private WmsForm form;
+	//用来批量删除数据
+	private String[] selected=new String[6];
 	// 列表页面
 	public String listUI() throws Exception {
 		QueryHelper queryHelper = new QueryHelper(WmsStorageBin.class, "e");
@@ -118,9 +127,56 @@ public class StorageBinAction extends BaseAction {
 
 	// 批量删除
 	public String deleteSelected() {
-		if (selectedRow != null) {
-			for (String id : selectedRow) {
-				storageBinService.delete(id);
+		try {
+			   for(int j=0;j<selectedRow.length;j++)
+			   {
+				   QueryHelper query=new QueryHelper(WmsStorageBin.class, "wsb");
+				   WmsStorageBin storagebin=storageBinService.findObjectById(selectedRow[j]);
+				   QueryHelper query2=new QueryHelper(WmsInventoryBin.class,"wib");
+				   query2.addCondition("wib.storageBinName=?",storagebin.getName() );
+				   query2.addCondition("wib.storageName=?",storagebin.getStoreName());
+				   
+				   List<WmsInventoryBin> list=inventoryBinService.findObjects(query2);
+				  
+				   if( list!=null && list.size()>0)
+					{
+						for(int i=0;i<list.size();i++)
+						{
+							WmsInventoryBin wib=list.get(i);
+							if(wib.getQuantity()>0)
+							{
+								
+								  break;//跳出当前for循环 
+							}
+							
+							if(i==list.size())
+								selected[j]=selectedRow[j];//selected[]是可以删除的数据
+								
+						}
+						
+						
+					}
+					else{
+						selected[j]=selectedRow[j];//selected[]是可以删除的数据
+					}
+				   
+					
+					
+					
+			   }
+			   for(int i=0;i<selected.length;i++)
+			   {
+				   System.out.println(selected[i]);
+			   }
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		if(selected != null){
+			for(String id: selected){
+				if(id!=null){
+					storageBinService.delete(id);
+				}
 			}
 		}
 		return "list";
@@ -160,23 +216,46 @@ public class StorageBinAction extends BaseAction {
 	public void verifyStorageBin()
 	{
 		//思路：根据id查询仓位名，再到单据明细表查询仓位名是否使用
+		//思路2(正确):到仓位库存表查看仓位，仓库名和数量。数量为0可以删除
 		try {
 			QueryHelper query=new QueryHelper(WmsStorageBin.class,"wsb");
 			//query.addCondition("wl.name=?", wmsLocation.getId());
 			//根据id查询仓位名
 			WmsStorageBin sb=storageBinService.findObjectById(storageBin.getId());
-			//到单据明细表查询仓位名是否使用
+			/*//到单据表和单据明细表查询仓位名和仓库名是否已经使用
 			QueryHelper query2=new QueryHelper(WmsFormDetail.class, "wfd");
+			query2.addTable(WmsForm.class, "wf");
+			query2.addSeletObject("inStorage","instorageBinName");
 			query2.addCondition("wfd.instorageBinName=?", sb.getName());
+			query2.addCondition("wf.inStorage=?", sb.getStoreName());
 		
-			List<WmsFormDetail> list=formDetailService.findObjects(query2);
-			
-			String strResult="true";
-			if(list!=null&&list.size()>0)
+			List<WmsStorageBin> list=storageBinService.findObjectsTwo(query2);*/
+			QueryHelper query2=new QueryHelper(WmsInventoryBin.class,"wib");
+			query2.addCondition("wib.storageName=?", sb.getStoreName());
+			query2.addCondition("wib.storageBinName=?", sb.getName());
+			List<WmsInventoryBin> list=inventoryBinService.findObjects(query2);
+			String strResult="flase";
+			if(list!=null && list.size()>0)
 			{
-				//数据已存在
-				strResult = "false";
+				for(int i=0;i<list.size();i++)
+				{
+					WmsInventoryBin win=list.get(i);
+					if(win.getQuantity()>0)
+					{
+						  strResult="flase";
+						  break;//跳出for循环 
+					}
+					else
+					{
+						strResult="true";
+						
+					}	
+				}	
 			}
+			else{
+				strResult="true";
+			}
+			
 			//输出
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setContentType("text/html");
@@ -205,5 +284,14 @@ public class StorageBinAction extends BaseAction {
 	public void setFormDetail(WmsFormDetail formDetail) {
 		this.formDetail = formDetail;
 	}
+
+	public WmsForm getForm() {
+		return form;
+	}
+
+	public void setForm(WmsForm form) {
+		this.form = form;
+	}
+	
 
 }

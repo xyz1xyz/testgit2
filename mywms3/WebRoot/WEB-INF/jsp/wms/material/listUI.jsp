@@ -16,16 +16,43 @@
       	}
       	//编辑
       	function doEdit(id){
+      	
       		document.forms[0].action = "${basePath}wms/material_editUI.action?material.id=" + id;
       		document.forms[0].submit();
+      		
       	}
       	//删除
       	function doDelete(id){
+      	 result=false;
+      	    $.ajax({
+      	      url:"${basePath}wms/material_verifyMaterial.action",
+      	      data:{"material.id":id},
+      	      type:"post",
+      	      async: false,//非异步,执行完这个ajax请求之后才能执行下面的提交请求
+      	      success:function(msg)
+      	      { 
+      	         
+      	        if("true"!=msg)
+      	        {
+      	          alert("该货物已有库存，不能删除");
+      	          result=false;
+      	        }
+      	        else{
+      	         result=true;
+      	           
+      	        }
+      	      }
+      	    
+      	    });
+      	  
+      	    if(result){
       		document.forms[0].action = "${basePath}wms/material_delete.action?material.id=" + id;
       		document.forms[0].submit();
+      		}
       	}
       	//批量删除
       	function doDeleteAll(){
+      	    //document.forms[0].action = "${basePath}wms/material_verifydeleteSelected.action";
       		document.forms[0].action = "${basePath}wms/material_deleteSelected.action";
       		document.forms[0].submit();
       	}

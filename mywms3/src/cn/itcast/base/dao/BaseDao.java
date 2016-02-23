@@ -29,4 +29,10 @@ public interface BaseDao<T> {
 		public List<T> findObjects(QueryHelper queryHelper);
 		//分页条件查询实体列表--查询助手queryHelper
 		public PageResult getPageResult(QueryHelper queryHelper, int pageNo, int pageSize);
+		/**
+		 * 多表查询
+		 * @param queryHelper 查询助手
+		 */
+		public List<T>  findObjectsTwo(QueryHelper queryHelper);
+		
 }

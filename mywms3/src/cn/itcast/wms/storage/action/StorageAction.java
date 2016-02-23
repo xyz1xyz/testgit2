@@ -30,7 +30,8 @@ public class StorageAction extends BaseAction {
 	private StorageBinService storageBinService;
 	private WmsStorage storage;
 	private WmsStorageBin storageBin;
-	
+	//用来批量删除数据
+	private String[] selected=new String[6];
 
 	//列表页面
 		public String listUI() throws Exception {
@@ -104,9 +105,37 @@ public class StorageAction extends BaseAction {
 		}
 		//批量删除
 		public String deleteSelected(){
-			if(selectedRow != null){
-				for(String id: selectedRow){
-					storageService.delete(id);
+			try {
+				   for(int j=0;j<selectedRow.length;j++)
+				   {
+					   
+				       
+					   QueryHelper query=new QueryHelper(WmsStorage.class, "ws");
+					   WmsStorage storages=storageService.findObjectById(selectedRow[j]);
+					   QueryHelper query2=new QueryHelper(WmsStorageBin.class,"wsb");
+					   query2.addCondition("wsb.storeName=?",storages.getName() );
+					   List<WmsStorageBin> list=storageBinService.findObjects(query2);
+					  
+						if(list.size()==0)
+						{
+							selected[j]=selectedRow[j];//selected[]是可以删除的数据
+						}
+						
+						
+				   }
+				   for(int i=0;i<selected.length;i++)
+				   {
+					   System.out.println(selected[i]);
+				   }
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			if(selected != null){
+				for(String id: selected){
+					if(id!=null){
+						storageService.delete(id);
+					}
 				}
 			}
 			return "list";

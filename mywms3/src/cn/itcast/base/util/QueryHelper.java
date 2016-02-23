@@ -3,6 +3,8 @@ package cn.itcast.base.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.hql.ast.tree.SelectClause;
+
 public class QueryHelper {
 	
 	//from子句
@@ -11,7 +13,8 @@ public class QueryHelper {
 	private String whereClause = "";
 	//order by子句
 	private String orderByClause = "";
-	
+	//select语句
+	private String selectClause = "";
 	private List<Object> parameters;
 	//排序顺序
 	public static String ORDER_BY_DESC = "DESC";//降序
@@ -64,8 +67,25 @@ public class QueryHelper {
 	
 	/**
 	 * 多表查询
+	 * @param clazz 实体类
+	 * @param alias 实体类对应的别名
 	 * @return
 	 */
+	public QueryHelper addTable(Class clazz,String alias)
+	{
+		 fromClause=fromClause+","+clazz.getSimpleName()+" "+alias;
+		 return this;
+			
+	}
+	/**
+	 * @param param 查询出来的字段
+	 * @return
+	 */
+	public QueryHelper addSeletObject(Object... param)
+	{
+		selectClause ="SELECT "+ param + " " +fromClause; 
+		return this;
+	}
 
 	//查询hql语句
 	public String getQueryListHql(){

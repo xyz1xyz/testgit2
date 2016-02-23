@@ -18,7 +18,7 @@ public class InventoryAction extends BaseAction{
 	// 仓库库存展示
 		public String listUI() throws Exception {
 			QueryHelper queryHelper = new QueryHelper(WmsInventory.class, "e");
-			
+			queryHelper.addCondition("e.quantity>?", 0);
 			try {
 				if (inventory != null) {
 					if (StringUtils.isNotBlank(inventory.getStorageName())) {
@@ -32,6 +32,7 @@ public class InventoryAction extends BaseAction{
 						queryHelper.addCondition("e.materialName like ?", "%"
 								+ inventory.getMaterialName() + "%");
 					}
+					
 
 				}
 				pageResult = inventoryService.getPageResult(queryHelper,

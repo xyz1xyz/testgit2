@@ -95,6 +95,22 @@ public abstract class BaseDaoImpl<T> extends HibernateDaoSupport implements Base
 		
 		return new PageResult(totalCount, pageNo, pageSize, items);
 	}
+	@Override
+	public List<T>  findObjectsTwo(QueryHelper queryHelper)
+	{
+		Query query=getSession().createQuery(queryHelper.getQueryListHql());
+		List<Object> parameters = queryHelper.getParameters();
+		if(parameters !=null)
+		{
+			for(int i=0;i<parameters.size();i++)
+			{
+				query.setParameter(i, parameters.get(i));
+				
+			}
+		}
+		return query.list();
+	}
+	
 
 
 }

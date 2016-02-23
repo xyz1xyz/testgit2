@@ -18,6 +18,7 @@ public class InventoryBinAction extends BaseAction {
 	// 仓位库存展示
 	public String listUI() throws Exception {
 		QueryHelper queryHelper = new QueryHelper(WmsInventoryBin.class, "e");
+		queryHelper.addCondition("e.quantity>?", 0);
 		try {
 			if (inventoryBin != null) {
 				if (StringUtils.isNotBlank(inventoryBin.getStorageName())) {

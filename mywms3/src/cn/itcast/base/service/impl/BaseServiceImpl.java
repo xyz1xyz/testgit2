@@ -61,6 +61,12 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 		// TODO Auto-generated method stub
 		return baseDao.findObjects(queryHelper);
 	}
+
+	@Override
+	public List<T> findObjectsTwo(QueryHelper queryHelper) {
+		// TODO Auto-generated method stub
+		return baseDao.findObjectsTwo(queryHelper);
+	}
 	
 
 }

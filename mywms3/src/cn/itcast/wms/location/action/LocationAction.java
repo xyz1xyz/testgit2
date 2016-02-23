@@ -14,8 +14,10 @@ import cn.itcast.base.action.BaseAction;
 import cn.itcast.base.util.QueryHelper;
 
 
+import cn.itcast.instorage.entity.WmsInventory;
 import cn.itcast.wms.location.entity.WmsLocation;
 import cn.itcast.wms.location.service.LocationService;
+import cn.itcast.wms.material.entity.WmsMaterial;
 import cn.itcast.wms.storage.entity.WmsStorage;
 import cn.itcast.wms.storage.service.StorageService;
 
@@ -27,7 +29,8 @@ public class LocationAction extends BaseAction {
 	private StorageService storageService;
 	private WmsLocation wmsLocation;
 	private WmsStorage wmsStorage;
-
+	//用来批量删除数据
+	private String[] selected=new String[6];
 	//列表页面
 		public String listUI() throws Exception {
 			QueryHelper queryHelper = new QueryHelper(WmsLocation.class, "w");
@@ -97,9 +100,38 @@ public class LocationAction extends BaseAction {
 		}
 		//批量删除
 		public String deleteSelected(){
-			if(selectedRow != null){
-				for(String id: selectedRow){
-					locationService.delete(id);
+			try {
+				   for(int j=0;j<selectedRow.length;j++)
+				   {
+					   
+				       
+					   QueryHelper query=new QueryHelper(WmsLocation.class, "wl");
+					   WmsLocation location=locationService.findObjectById(selectedRow[j]);
+					   QueryHelper query2=new QueryHelper(WmsStorage.class,"ws");
+					   query2.addCondition("ws.address=?",location.getName() );
+					   List<WmsStorage> list=storageService.findObjects(query2);
+					  
+						if(list.size()==0)
+						{
+							selected[j]=selectedRow[j];//selected[]是可以删除的数据
+						}
+						
+						
+						
+				   }
+				  /* for(int i=0;i<selected.length;i++)
+				   {
+					   System.out.println(selected[i]);
+				   }*/
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			if(selected != null){
+				for(String id: selected){
+					if(id!=null){
+						locationService.delete(id);
+					}
 				}
 			}
 			return "list";
