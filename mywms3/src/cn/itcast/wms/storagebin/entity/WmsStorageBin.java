@@ -11,6 +11,7 @@ public class WmsStorageBin implements java.io.Serializable {
 	private String id;
 	private String name;
 	private String storeName;
+	private String storeId;
 
 	// Constructors
 
@@ -19,9 +20,10 @@ public class WmsStorageBin implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public WmsStorageBin(String name, String storeName) {
+	public WmsStorageBin(String name, String storeName,String storeId) {
 		this.name = name;
 		this.storeName = storeName;
+		this.storeId=storeId;
 	}
 
 	// Property accessors
@@ -48,6 +50,14 @@ public class WmsStorageBin implements java.io.Serializable {
 
 	public void setStoreName(String storeName) {
 		this.storeName = storeName;
+	}
+
+	public String getStoreId() {
+		return storeId;
+	}
+
+	public void setStoreId(String storeId) {
+		this.storeId = storeId;
 	}
 
 }

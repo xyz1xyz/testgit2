@@ -13,7 +13,7 @@
     				url:"${basePath}wms/sn_verifySN.action",
     				data: {"sn.sn":sn},
     				type: "post",
-    				
+    				async: false,//非异步
     				success: function(msg){
     				 
     					if("true" != msg){
@@ -64,7 +64,10 @@
          
           </tr>
           
-          
+          <tr>
+          <td class="tdBg" width="200px">客户名：</td>
+         <td><s:select id="customerName" list="#request.customerlist" name="sn.customerName" listKey="name" listValue="name"></s:select></td>
+       </tr>
             
             <tr>
             <td class="tdBg" width="200px">货物名：</td>

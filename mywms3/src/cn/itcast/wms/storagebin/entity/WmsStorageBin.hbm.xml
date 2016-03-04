@@ -16,5 +16,8 @@
         <property name="storeName" type="java.lang.String">
             <column name="storeName" length="32" />
         </property>
+        <property name="storeId" type="java.lang.String">
+            <column name="store_id" length="32" />
+        </property>
     </class>
 </hibernate-mapping>

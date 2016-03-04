@@ -36,8 +36,9 @@
     	}
     	//提交表单
     	function doSubmit(){
+    	   
     	 doVerify();
-    	
+    	  
     		if(vResult){
 	    		//提交表单
 	    		document.forms[0].submit();
@@ -58,6 +59,11 @@
             <td class="tdBg" width="200px">地域名：</td>
             <td><s:textfield id="name" name="wmsLocation.name" onchange="doVerify()"/> </td>
             
+           
+        </tr>
+        <tr>
+        <td class="tdBg" width="200px">选择分类：</td>
+          <td><s:select  name="wmsLocation.catogery" list="#{'0':'同一地域同一sn','1':'同一地域不同sn' }" /></td>
         </tr>
         
        <input type="text" name="aa" style="display:none"/>

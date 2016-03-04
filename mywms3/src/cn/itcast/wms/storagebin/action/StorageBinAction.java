@@ -83,6 +83,8 @@ public class StorageBinAction extends BaseAction {
 		try {
 			if (storageBin != null) {
 
+				WmsStorage ws=storageService.findObjectById(storageBin.getStoreId());
+				storageBin.setStoreName(ws.getName());
 				storageBinService.save(storageBin);
 			}
 		} catch (Exception e) {
@@ -109,6 +111,18 @@ public class StorageBinAction extends BaseAction {
 		try {
 			if (storageBin != null) {
 
+				 //修改仓位库存表的仓库名
+                QueryHelper query2=new QueryHelper(WmsInventoryBin.class, "wsb");
+                query2.addCondition("wsb.storeBinId=?", storageBin.getId());
+                List<WmsInventoryBin> wibs=inventoryBinService.findObjects(query2);
+                for(WmsInventoryBin wib:wibs)
+                {
+              	  wib.setStorageBinName(storageBin.getName());
+              	  inventoryBinService.update(wib);
+              	  
+                }
+                
+              
 				storageBinService.update(storageBin);
 			}
 		} catch (Exception e) {

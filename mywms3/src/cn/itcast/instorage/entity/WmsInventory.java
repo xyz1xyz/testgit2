@@ -12,6 +12,7 @@ public class WmsInventory implements java.io.Serializable {
 	private String storageName;
 	private String materialName;
 	private Integer quantity;
+	private String storeId;
 
 	// Constructors
 
@@ -20,10 +21,11 @@ public class WmsInventory implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public WmsInventory(String storageName, String materialName, Integer quantity) {
+	public WmsInventory(String storageName, String materialName, Integer quantity,String storeId) {
 		this.storageName = storageName;
 		this.materialName = materialName;
 		this.quantity = quantity;
+		this.storeId=storeId;
 	}
 
 	// Property accessors
@@ -60,6 +62,14 @@ public class WmsInventory implements java.io.Serializable {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+
+	public String getStoreId() {
+		return storeId;
+	}
+
+	public void setStoreId(String storeId) {
+		this.storeId = storeId;
 	}
 
 }

@@ -19,7 +19,7 @@
       	}
       	//编辑
       	function doEdit(id){
-      	 result=false;
+      	/*  result=false;
       	    $.ajax({
       	      url:"${basePath}wms/location_verifyLocation.action",
       	      data:{"wmsLocation.id":id},
@@ -30,9 +30,13 @@
       	         
       	        if("true"!=msg)
       	        {
-      	         alert(msg);
-      	          alert("该地域已被使用，不能编辑");
-      	          result=false;
+      	         //alert(msg);
+      	         alert("该地域已被使用，不能编辑");
+      	      //window.location.href="${ctx }outstorage/storage_listUI.action";
+      	    
+      	       
+      	        // <a class="" href="${ctx }outstorage/outstorage_listUI.action" target="body"><b></b>出库</a>
+      	         result=false;
       	        }
       	        else{
       	         result=true;
@@ -45,11 +49,19 @@
       	    if(result){
       		document.forms[0].action = "${basePath}wms/location_editUI.action?wmsLocation.id=" + id;
       		document.forms[0].submit();
-      		}
+      		} */
+      		
+      		     document.forms[0].action = "${basePath}wms/location_editUI.action?wmsLocation.id=" + id;
+      		document.forms[0].submit();
+      	   
+      		 
+      		
       	}
       	//删除
-      	function doDelete(id){
+      	function doDelete(id,name){
+      	 
       	    result=false;
+      	    if (confirm('您确定要删除吗？') == true) {
       	    $.ajax({
       	      url:"${basePath}wms/location_verifyLocation.action",
       	      data:{"wmsLocation.id":id},
@@ -60,27 +72,33 @@
       	         
       	        if("true"!=msg)
       	        {
-      	          alert("该地域已被使用，不能删除");
+      	          alert("已有仓库，请删除"+name+"的所有仓库");
+      	          
+      	           window.open("${ctx }wms/storage_listUI.action");
       	          result=false;
       	        }
       	        else{
       	         result=true;
-      	           
+      	          
       	        }
       	      }
       	    
       	    });
+      	    }
       	  
       	    if(result){
-      	    
+      	       
       		document.forms[0].action = "${basePath}wms/location_delete.action?wmsLocation.id=" + id;
       		document.forms[0].submit();
+      		
       		}
       	}
       	//批量删除
       	function doDeleteAll(){
+      	 if (confirm('您确定要全部删除吗？') == true){
       		document.forms[0].action = "${basePath}wms/location_deleteSelected.action";
       		document.forms[0].submit();
+      		}
       	}
       	
       	var list_url = "${basePath}wms/location_listUI.action";
@@ -116,6 +134,7 @@
                             <td width="30" align="center"><input type="checkbox" id="selAll" onclick="doSelectAll()" /></td>
                             <td width="140" align="center">ID</td>
                             <td width="140" align="center"> 地域名</td>
+                             <td width="140" align="center">所属分类</td>
                             <td width="100" align="center">操作</td>
                         </tr>
                         <s:iterator value="pageResult.items" status="st">
@@ -123,10 +142,10 @@
                                 <td align="center"><input type="checkbox" name="selectedRow" value="<s:property value='id'/>" /></td>
                                 <td align="center"><s:property value="id"/></td>
                                 <td align="center"><s:property value="name"/></td>
-                               
+                                <td align="center"><s:property value="#CATOGERY_MAP[catogery]"/></td>
                                 <td align="center">
-                                    <a href="javascript:doEdit('<s:property  value='id'/>')">编辑</a>
-                                    <a href="javascript:doDelete('<s:property  value='id'/>')">删除</a>
+                                    <a href="javascript:doEdit('<s:property  value='id'/>')"  >编辑</a>
+                                    <a href="javascript:doDelete('<s:property  value='id'/>','<s:property  value='name'/>')">删除</a>
                                 </td>
                             </tr>
                         </s:iterator>

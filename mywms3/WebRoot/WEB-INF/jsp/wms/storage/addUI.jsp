@@ -50,7 +50,7 @@
     <div class="p_d_1">
         <div class="p_d_1_1">
             <div class="content_info">
-    <div class="c_crumbs"><div><b></b><strong> 仓库管理</strong>&nbsp;-&nbsp;新增地点</div></div>
+    <div class="c_crumbs"><div><b></b><strong> 仓库管理</strong>&nbsp;-&nbsp;新增仓库</div></div>
     <div class="tableH2">新增仓库</div>
     <table id="baseInfo" width="100%" align="center" class="list" border="0" cellpadding="0" cellspacing="0"  >
        
@@ -60,7 +60,7 @@
          </tr>
          <tr>
           <td class="tdBg" width="200px">所属地域：</td>
-         <td><s:select id="address" list="#request.locationlist" name="storage.address" listKey="name" listValue="name"></s:select></td>
+         <td><s:select id="address" list="#request.locationlist" name="storage.addressId" listKey="id" listValue="name"></s:select></td>
        </tr>
           <input type="text" name="aa" style="display:none"/>
     </table>

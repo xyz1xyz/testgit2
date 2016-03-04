@@ -12,7 +12,7 @@ public class WmsSn implements java.io.Serializable {
 	private String materialName;
 	private String addressName;
 	private String sn;
-	
+	private String customerName;
 
 
 	// Constructors
@@ -22,10 +22,11 @@ public class WmsSn implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public WmsSn(String materialName, String addressName, String sn) {
+	public WmsSn(String materialName, String addressName, String sn,String customerName) {
 		this.materialName = materialName;
 		this.addressName = addressName;
 		this.sn = sn;
+		this.customerName=customerName;
 		
 		
 	}
@@ -62,6 +63,14 @@ public class WmsSn implements java.io.Serializable {
 
 	public void setSn(String sn) {
 		this.sn = sn;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
 
 	

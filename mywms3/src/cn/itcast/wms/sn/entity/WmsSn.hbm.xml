@@ -19,6 +19,9 @@
         <property name="sn" type="java.lang.String">
             <column name="sn" length="32" />
         </property>
+         <property name="customerName" type="java.lang.String">
+            <column name="customerName" length="32" />
+        </property>
         
       
     </class>

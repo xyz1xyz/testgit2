@@ -1,5 +1,6 @@
 package cn.itcast.wms.storage.action;
 
+import java.net.URLDecoder;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -13,6 +14,10 @@ import com.opensymphony.xwork2.ActionContext;
 
 import cn.itcast.base.action.BaseAction;
 import cn.itcast.base.util.QueryHelper;
+import cn.itcast.instorage.entity.WmsInventory;
+import cn.itcast.instorage.entity.WmsInventoryBin;
+import cn.itcast.instorage.service.WmsInventoryBinService;
+import cn.itcast.instorage.service.WmsInventoryService;
 import cn.itcast.wms.location.entity.WmsLocation;
 import cn.itcast.wms.location.service.LocationService;
 import cn.itcast.wms.storage.entity.WmsStorage;
@@ -28,6 +33,11 @@ public class StorageAction extends BaseAction {
 	private LocationService locationService;
 	@Resource
 	private StorageBinService storageBinService;
+	@Resource
+	private WmsInventoryBinService inventoryBinService;
+	@Resource
+	private WmsInventoryService inventoryService;
+	
 	private WmsStorage storage;
 	private WmsStorageBin storageBin;
 	//用来批量删除数据
@@ -39,8 +49,14 @@ public class StorageAction extends BaseAction {
 			try {
 				if (storage != null) {
 					if (StringUtils.isNotBlank(storage.getName())) {
-						
+						storage.setName(URLDecoder.decode(storage.getName(),"UTF-8"));
 						queryHelper.addCondition("e.name like ?", "%" + storage.getName() + "%");
+					}
+					if(StringUtils.isNoneBlank(storage.getAddress()))
+					{
+						
+						storage.setAddress(URLDecoder.decode(storage.getAddress(), "UTF-8"));
+						queryHelper.addCondition("e.name like ?",  "%" + storage.getAddress() + "%");
 					}
 
 				}
@@ -64,7 +80,8 @@ public class StorageAction extends BaseAction {
 		public String add(){
 			try {
 				if(storage != null){
-				
+					WmsLocation location=locationService.findObjectById(storage.getAddressId());
+					storage.setAddress(location.getName());
 					storageService.save(storage);
 				}
 			} catch (Exception e) {
@@ -77,7 +94,7 @@ public class StorageAction extends BaseAction {
 			//加载地域
 			ActionContext.getContext().getContextMap().put("locationlist", locationService.findObjects());
 			if (storage != null && storage.getId() != null) {
-			
+			   
 				storage = storageService.findObjectById(storage.getId());
 				
 			}
@@ -87,8 +104,36 @@ public class StorageAction extends BaseAction {
 		public String edit(){
 			try {
 				if(storage != null){
-					
-
+					//修改仓位表中的仓库名
+                  QueryHelper query=new QueryHelper(WmsStorageBin.class, "wb");
+                  query.addCondition("wb.storeId=?", storage.getId());
+                  List<WmsStorageBin> sbs=storageBinService.findObjects(query);
+                  for(WmsStorageBin wsb:sbs)
+                  {
+                	  wsb.setStoreName(storage.getName());
+                	  storageBinService.update(wsb);
+                  }
+                  //修改仓位库存表的仓库名
+                  QueryHelper query2=new QueryHelper(WmsInventoryBin.class, "wsb");
+                  query2.addCondition("wsb.storeId=?", storage.getId());
+                  List<WmsInventoryBin> wibs=inventoryBinService.findObjects(query2);
+                  for(WmsInventoryBin wib:wibs)
+                  {
+                	  wib.setStorageName(storage.getName());
+                	  inventoryBinService.update(wib);
+                	  
+                  }
+                  
+                  //修改仓库库存表的仓库名
+                  QueryHelper query3=new QueryHelper(WmsInventory.class, "wi");
+                  query3.addCondition("wi.storeId=?", storage.getId());
+                  List<WmsInventory> wis=inventoryService.findObjects(query3);
+                  for(WmsInventory wi:wis)
+                  {
+                	  wi.setStorageName(storage.getName());
+                	  inventoryService.update(wi);
+                  }
+                    
 					storageService.update(storage);
 				}
 			} catch (Exception e) {

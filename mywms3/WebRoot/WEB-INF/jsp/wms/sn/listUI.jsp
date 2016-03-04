@@ -54,6 +54,9 @@
                     <li>
                           货物名：<s:textfield name="sn.materialName"  cssClass="s_text"  cssStyle="width:120px;"/>
                     </li>
+                    <li>
+                          客户名：<s:textfield name="sn.customerName"  cssClass="s_text"  cssStyle="width:120px;"/>
+                    </li>
                   
                        <li>
                         二维码：<s:textfield name="sn.sn" cssClass="s_text"  cssStyle="width:120px;"/>
@@ -72,7 +75,7 @@
                         <tr class="t_tit">
                             <td width="30" align="center"><input type="checkbox" id="selAll" onclick="doSelectAll()" /></td>
                            <td width="140" align="center">地域名</td>
-                           
+                            <td width="140" align="center">客户名</td>
                              <td width="140" align="center">货物名</td>
                              <td width="140" align="center">二维码</td>
                             <td width="100" align="center">操作</td>
@@ -81,14 +84,14 @@
                             <tr <s:if test="#st.odd">bgcolor="f8f8f8"</s:if> >
                                 <td align="center"><input type="checkbox" name="selectedRow" value="<s:property value='id'/>" /></td>
                                 <td align="center"><s:property value="addressName"/></td>
-                              
+                              <td align="center"><s:property value="customerName"/></td>
                                 <td align="center"><s:property value="materialName"/></td>
                                 <td align="center"><s:property value="sn"/></td>
                                
                                
                                
                                 <td align="center">
-                                    <a href="javascript:doEdit('<s:property value='id'/>')">编辑</a>
+                                    <%-- <a href="javascript:doEdit('<s:property value='id'/>')">编辑</a> --%>
                                     <a href="javascript:doDelete('<s:property value='id'/>')">删除</a>
                                 </td>
                             </tr>

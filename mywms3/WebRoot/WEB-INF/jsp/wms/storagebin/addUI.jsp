@@ -59,7 +59,7 @@
          </tr>
          <tr>
           <td class="tdBg" width="200px">所属仓库：</td>
-         <td><s:select id="storage" list="#request.storagelist" name="storageBin.storeName" listKey="name" listValue="name" ></s:select></td>
+         <td><s:select id="storage" list="#request.storagelist" name="storageBin.storeId" listKey="id" listValue="name" ></s:select></td>
        </tr>
        <input type="text" name="aa" style="display:none"/>
         

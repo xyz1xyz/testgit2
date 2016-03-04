@@ -13,6 +13,8 @@ public class WmsInventoryBin implements java.io.Serializable {
 	private String storageBinName;
 	private String materialName;
 	private Integer quantity;
+	private String storeId;
+	private String storeBinId;
 
 	// Constructors
 
@@ -73,6 +75,22 @@ public class WmsInventoryBin implements java.io.Serializable {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+
+	public String getStoreId() {
+		return storeId;
+	}
+
+	public void setStoreId(String storeId) {
+		this.storeId = storeId;
+	}
+
+	public String getStoreBinId() {
+		return storeBinId;
+	}
+
+	public void setStoreBinId(String storeBinId) {
+		this.storeBinId = storeBinId;
 	}
 
 }

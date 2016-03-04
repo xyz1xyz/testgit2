@@ -16,5 +16,8 @@
         <property name="address" type="java.lang.String">
             <column name="address" length="32" />
         </property>
+        <property name="addressId" type="java.lang.String">
+            <column name="address_id" length="32" />
+        </property>
     </class>
 </hibernate-mapping>

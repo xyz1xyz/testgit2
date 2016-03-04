@@ -10,10 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 
+import com.opensymphony.xwork2.ActionContext;
+
 import cn.itcast.base.action.BaseAction;
 import cn.itcast.base.util.QueryHelper;
 
 
+import cn.itcast.instorage.entity.WmsForm;
 import cn.itcast.instorage.entity.WmsInventory;
 import cn.itcast.wms.location.entity.WmsLocation;
 import cn.itcast.wms.location.service.LocationService;
@@ -33,6 +36,10 @@ public class LocationAction extends BaseAction {
 	private String[] selected=new String[6];
 	//列表页面
 		public String listUI() throws Exception {
+			
+			// 加载类型集合
+			ActionContext.getContext().getContextMap()
+							.put("CATOGERY_MAP",WmsLocation.CATOGERY_MAP);
 			QueryHelper queryHelper = new QueryHelper(WmsLocation.class, "w");
 			try {
 				if (wmsLocation != null) {
@@ -53,7 +60,9 @@ public class LocationAction extends BaseAction {
 
 		//转到增加页面
 		public String addUI(){
-			
+			// 加载类型集合
+						ActionContext.getContext().getContextMap()
+										.put("CATOGERY_MAP",WmsLocation.CATOGERY_MAP);
 			return "addUI";
 		}
 		//保持新增
@@ -72,7 +81,7 @@ public class LocationAction extends BaseAction {
 		public String editUI(){
 			
 			if (wmsLocation != null && wmsLocation.getId() != null) {
-			
+			    
 				wmsLocation = locationService.findObjectById(wmsLocation.getId());
 				
 			}
@@ -82,6 +91,15 @@ public class LocationAction extends BaseAction {
 		public String edit(){
 			try {
 				if(wmsLocation != null){
+					//查找仓库表并修改
+					QueryHelper query=new QueryHelper(WmsStorage.class, "ws");
+					query.addCondition("ws.addressId=?", wmsLocation.getId());
+					List<WmsStorage> storages=storageService.findObjects(query);
+					for(WmsStorage ws:storages)
+					{
+						ws.setAddress(wmsLocation.getName());
+						storageService.update(ws);
+					}
 					
 
 					locationService.update(wmsLocation);
@@ -150,7 +168,12 @@ public class LocationAction extends BaseAction {
 					String strResult = "true";
 					if(list != null && list.size() > 0){
 						//数据已存在
-						strResult = "false";
+						WmsLocation loca=list.get(0);
+						if(loca.getId().equals(wmsLocation.getId()))
+						    strResult = "true";
+						else
+							strResult = "false";
+						
 					}
 					
 					//输出

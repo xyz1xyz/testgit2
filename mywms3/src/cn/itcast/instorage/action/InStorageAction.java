@@ -137,14 +137,23 @@ public class InStorageAction extends BaseAction {
 			queryHelper.addCondition("wib.storageBinName=?", formdetail.getInstorageBinName());
 			queryHelper.addCondition("wib.materialName=?", formdetail.getMaterialName());
 			List<WmsInventoryBin> inventorybins=inventoryBinService.findObjects(queryHelper);
+			
+			
 			if(inventorybins.size()>0)
 			{
 			  WmsInventoryBin inventorybin=inventorybins.get(0);
+			  
+			 
+			  
 			  int quantity=formdetail.getQuantity()+inventorybin.getQuantity();
 			  inventorybin.setQuantity(quantity);
 			  inventoryBinService.update(inventorybin);
 			}
 			else{
+				 //设置仓库id和仓位id
+				  WmsStorageBin wsbs=storageBinService.findObjectById(formdetail.getInstorageBinCode());
+				  inventoryBin.setStoreId(wsbs.getStoreId());
+				  inventoryBin.setStoreBinId(wsbs.getId());
 			inventoryBin.setQuantity(formdetail.getQuantity());
 			inventoryBinService.save(inventoryBin);
 			}
@@ -155,6 +164,9 @@ public class InStorageAction extends BaseAction {
 			
 			inventory.setStorageName(form.getInStorage());
 			inventory.setMaterialName(formdetail.getMaterialName());
+			/*QueryHelper que=new QueryHelper(WmsStorage.class, "ws");
+			que.addCondition("ws.name", form.getInStorage());
+			List<WmsStorage> storages= storageService.findObjects(que);*/
 			
 			
 			QueryHelper query=new QueryHelper(WmsInventory.class, "wi");
@@ -171,6 +183,9 @@ public class InStorageAction extends BaseAction {
 			 inventoryService.update(in);
 			}
 			else{
+				//设置仓库id
+				 WmsStorageBin wsbs=storageBinService.findObjectById(formdetail.getInstorageBinCode());
+				 inventory.setStoreId(wsbs.getStoreId());
 				
 				 inventory.setQuantity(formdetail.getQuantity());
 				 inventoryService.save(inventory);

@@ -19,7 +19,7 @@
       	}
       	//编辑
       	function doEdit(id){
-      	   result=false;
+      	  /*  result=false;
       	    $.ajax({
       	      url:"${basePath}wms/storage_verifyStorage.action",
       	      data:{"storage.id":id},
@@ -41,14 +41,16 @@
       	    
       	    });
       	  
-      	    if(result){
+      	    if(result){ */
+      	    
       		document.forms[0].action = "${basePath}wms/storage_editUI.action?storage.id=" + id;
       		document.forms[0].submit();
-      		}
+      		
       	}
       	//删除
       	function doDelete(id){
       	 result=false;
+      	   if (confirm('您确定要删除吗？') == true) {
       	    $.ajax({
       	      url:"${basePath}wms/storage_verifyStorage.action",
       	      data:{"storage.id":id},
@@ -59,16 +61,20 @@
       	         
       	        if("true"!=msg)
       	        {
-      	          alert("该仓库已被使用，不能删除");
+      	        
+      	          alert("删除失败，该仓库已被使用，请删除该仓库下的仓位");
+      	           window.open("${ctx }wms/storagebin_listUI.action");
       	          result=false;
       	        }
       	        else{
       	         result=true;
+      	         alert("删除成功");
       	           
       	        }
       	      }
       	    
       	    });
+      	    }
       	  
       	    if(result){
       		document.forms[0].action = "${basePath}wms/storage_delete.action?storage.id=" + id;
@@ -78,8 +84,10 @@
       	}
       	//批量删除
       	function doDeleteAll(){
+      	 if (confirm('您确定要全部删除吗？') == true){
       		document.forms[0].action = "${basePath}wms/storage_deleteSelected.action";
       		document.forms[0].submit();
+      		}
       	}
       	
       	var list_url = "${basePath}wms/storage_listUI.action";
@@ -101,6 +109,9 @@
                 <div class="search_art">
                     <li>
                           仓库名：<s:textfield name="storage.name" cssClass="s_text" id="storageName"  cssStyle="width:160px;"/>
+                    </li>
+                      <li>
+                          地域：<s:textfield name="storage.address" cssClass="s_text" id="storageAddress"  cssStyle="width:160px;"/>
                     </li>
                     <li><input type="button" class="s_button" value="搜 索" onclick="doSearch()"/></li>
                     <li style="float:right;">

@@ -11,6 +11,7 @@ public class WmsStorage implements java.io.Serializable {
 	private String id;
 	private String name;
 	private String address;
+	private String addressId;
 
 	// Constructors
 
@@ -19,9 +20,10 @@ public class WmsStorage implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public WmsStorage(String name, String address) {
+	public WmsStorage(String name, String address,String addressId) {
 		this.name = name;
 		this.address = address;
+		this.addressId=addressId;
 	}
 
 	// Property accessors
@@ -49,5 +51,14 @@ public class WmsStorage implements java.io.Serializable {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
+	public String getAddressId() {
+		return addressId;
+	}
+
+	public void setAddressId(String addressId) {
+		this.addressId = addressId;
+	}
+	
 
 }

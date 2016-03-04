@@ -28,6 +28,8 @@
       <!--仓位库存查询  -->  
       <include file="cn/itcast/inventorybin/conf/inventorybin-struts.xml"></include>
       <include file="cn/itcast/inventory/conf/inventory-struts.xml"></include>
+      
+     
       <!-- 登录 -->
        <include file="cn/itcast/login/conf/login-struts.xml"></include>
         <include file="cn/itcast/home/conf/home-struts.xml"></include>

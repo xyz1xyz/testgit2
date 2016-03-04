@@ -39,6 +39,7 @@ public abstract class BaseDaoImpl<T> extends HibernateDaoSupport implements Base
 	public T findObjectById(Serializable id) {
 		return getHibernateTemplate().get(clazz, id);
 	}
+	
 
 	@Override
 	public List<T> findObjects() {

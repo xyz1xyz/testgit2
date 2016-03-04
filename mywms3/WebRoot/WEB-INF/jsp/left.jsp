@@ -95,7 +95,11 @@
                     <dt><a class="fwyy" href="${ctx }wms/material_listUI.action" target="body"><b></b>货物管理<s class="down"></s>
                     </a></dt>
                 </dl>
-
+                
+                 <dl>
+                    <dt><a class="xxfb" href="${ctx }wms/customer_listUI.action" target="body"><b></b>客户管理<s
+                            class="down"></s> </a></dt>
+                </dl>
                 <dl>
                     <dt><a class="xxfb" href="${ctx }wms/sn_listUI.action" target="body"><b></b>二维码管理<s
                             class="down"></s> </a></dt>

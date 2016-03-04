@@ -13,7 +13,10 @@ import com.opensymphony.xwork2.ActionContext;
 
 import cn.itcast.base.action.BaseAction;
 import cn.itcast.base.util.QueryHelper;
-
+import cn.itcast.base.util.SnUtil;
+import cn.itcast.wms.customer.entity.WmsCustomer;
+import cn.itcast.wms.customer.service.CustomerService;
+import cn.itcast.wms.location.entity.WmsLocation;
 import cn.itcast.wms.location.service.LocationService;
 import cn.itcast.wms.material.service.MaterialService;
 import cn.itcast.wms.sn.entity.WmsSn;
@@ -30,8 +33,10 @@ public class SnAction extends BaseAction {
 	private MaterialService materialService;
 	@Resource
 	private LocationService locationService;
-
+    @Resource
+    private CustomerService customerService;
 	private WmsSn sn;
+	
 
 	//列表页面
 	public String listUI() throws Exception {
@@ -54,8 +59,14 @@ public class SnAction extends BaseAction {
 					queryHelper.addCondition("e.sn like ?",
 							"%" + sn.getSn() + "%");
 				}
+				if (StringUtils.isNotBlank(sn.getCustomerName())) {
+
+					queryHelper.addCondition("e.customerName like ?",
+							"%" + sn.getCustomerName() + "%");
+				}
 
 			}
+			
 			pageResult = snService.getPageResult(queryHelper, getPageNo(),
 					getPageSize());
 		} catch (Exception e) {
@@ -74,6 +85,9 @@ public class SnAction extends BaseAction {
 		// 加载地域列表
 		ActionContext.getContext().getContextMap()
 				.put("locationlist", locationService.findObjects());
+		//加载客户列表
+		ActionContext.getContext().getContextMap()
+		.put("customerlist", customerService.findObjects());
 		
 		return "addUI";
 	}
@@ -82,7 +96,30 @@ public class SnAction extends BaseAction {
 	public String add() {
 		try {
 			if (sn != null) {
-
+                QueryHelper query =new QueryHelper(WmsLocation.class, "wl");
+                query.addCondition("wl.name=?", sn.getAddressName());
+                List<WmsLocation> locations=locationService.findObjects(query);
+                 // locations.get(0)
+                WmsLocation wlt=locations.get(0);
+                if(wlt.getCatogery().equals("0"))
+                {
+                	QueryHelper query2=new QueryHelper(WmsSn.class, "ws");
+                	 query2.addCondition("ws.addressName=?", sn.getAddressName());
+                	 query2.addCondition("ws.materialName=?", sn.getMaterialName());
+                	List<WmsSn> sns= snService.findObjects(query2);
+                	if(sns.size()>0)
+                	{
+                		WmsSn sn1=sns.get(0);
+                		sn.setSn(sn1.getSn());
+                	}
+                	else{
+                		sn.setSn(SnUtil.buildProductSn());
+                	}
+                	
+                }else
+                {
+                	sn.setSn(SnUtil.buildProductSn());
+                }
 				snService.save(sn);
 			}
 		} catch (Exception e) {
@@ -99,7 +136,9 @@ public class SnAction extends BaseAction {
 		//加载地域
 		ActionContext.getContext().getContextMap()
 				.put("locationlist", locationService.findObjects());
-		
+		//加载客户列表
+				ActionContext.getContext().getContextMap()
+				.put("customerlist", customerService.findObjects());
 		if (sn != null && sn.getId() != null) {
 
 			sn = snService.findObjectById(sn.getId());
@@ -139,7 +178,7 @@ public class SnAction extends BaseAction {
 		}
 		return "list";
 	}
-	//校验地域和货物
+	//校验地域和货物和客户
 		public void verify(){
 			try {
 			
@@ -149,6 +188,7 @@ public class SnAction extends BaseAction {
 					query.addCondition("wl.addressName=?",sn.getAddressName() );
 					
 					query.addCondition("wl.materialName=?", sn.getMaterialName());
+					query.addCondition("wl.customerName=?", sn.getCustomerName());
 					
 					List<WmsSn> list=snService.findObjects(query);
 					

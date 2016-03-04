@@ -19,5 +19,9 @@
         <property name="quantity" type="java.lang.Integer">
             <column name="quantity" />
         </property>
+         <property name="storeId" type="java.lang.String">
+            <column name="store_id" length="32"/>
+        </property>
+        
     </class>
 </hibernate-mapping>
