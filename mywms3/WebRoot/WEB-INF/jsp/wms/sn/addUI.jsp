@@ -5,10 +5,10 @@
     <title> 二维码管理</title>
   
     <script type="text/javascript">
-    //var vResult = false;
+    var vResult = false;
     var result=false;
        //校验二维码唯一
-      /*  function doVerifySN(){
+       function doVerifySN(){
      var sn = $("#sn").val();
       //if(sn != ""){
        $.ajax({
@@ -30,7 +30,7 @@
          }
          });
         // }
-       } */
+       }
     	//校验货物名和地域和客户唯一
     	function doVerify(){
     		
@@ -66,14 +66,14 @@
     	function doSubmit(){
     	
     	 var sn = $("#sn").val();
-    	 if(sn=="")
+    	 /* if(sn=="")
     	 {
     	  alert("请输入二维码!");
     	  return false;
-    	 }
-    	 //doVerifySN();
+    	 } */
+    	 doVerifySN();
     	 doVerify();
-    		if( result==true){
+    		if( result==true&&vResult==true){
 	    		//提交表单
 	    		document.forms[0].submit();
     		}
@@ -100,6 +100,10 @@
             <td class="tdBg" width="200px">货物名：</td>
             <td><s:select id="materialName" list="#materiallist" name="sn.materialName" listKey="name" listValue="name"  onchange="doVerify()"></s:select></td>
          </tr>
+         <tr>
+          <td class="tdBg" width="200px">二维码：</td>
+         <td><s:textfield id="sn"  name="sn.sn" /></td>
+       </tr>
         
         <%-- <tr>
             <td class="tdBg" width="200px">二维码：</td>

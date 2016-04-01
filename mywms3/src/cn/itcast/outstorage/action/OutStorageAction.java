@@ -30,6 +30,7 @@ import cn.itcast.wms.location.entity.WmsLocation;
 import cn.itcast.wms.location.service.LocationService;
 import cn.itcast.wms.material.entity.WmsMaterial;
 import cn.itcast.wms.material.service.MaterialService;
+import cn.itcast.wms.storage.entity.WmsStorage;
 import cn.itcast.wms.storage.service.StorageService;
 import cn.itcast.wms.storagebin.entity.WmsStorageBin;
 import cn.itcast.wms.storagebin.service.StorageBinService;
@@ -119,8 +120,16 @@ public class OutStorageAction extends BaseAction{
 				String time=ServletActionContext.getRequest().getParameter("time");
 				form.setOptime(new Timestamp(DateUtils.parseDate(time, "yyyy-MM-dd HH:mm").getTime()));
 				form.setCreateDate(new Timestamp(new Date().getTime()));
+				//设置出库仓库id
+				QueryHelper querys=new QueryHelper(WmsStorage.class, "ws");
+				querys.addCondition("ws.name=?", form.getOutStorage());
+				List<WmsStorage>  wss=storageService.findObjects(querys);
+				WmsStorage storage=wss.get(0);
+				form.setOutStorageId(storage.getId());
 				//保存单据表
 				wmsFormService.save(form);
+				
+
 				
 				
 				//单据明细表
@@ -138,7 +147,7 @@ public class OutStorageAction extends BaseAction{
 				}*/
 				
 				//设置仓位id
-				formdetail.setInstorageBinCode(sb.getId());
+				formdetail.setOutstorageBinCode(sb.getId());
 				//保存详细表
 				wmsFormDetailService.save(formdetail);
 			

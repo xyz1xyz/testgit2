@@ -95,7 +95,7 @@ public class SnAction extends BaseAction {
 	// 保存新增
 	public String add() {
 		try {
-			if (sn != null) {
+			if (!StringUtils.isNotBlank(sn.getSn())) {
                 QueryHelper query =new QueryHelper(WmsLocation.class, "wl");
                 query.addCondition("wl.name=?", sn.getAddressName());
                 List<WmsLocation> locations=locationService.findObjects(query);
@@ -120,6 +120,9 @@ public class SnAction extends BaseAction {
                 {
                 	sn.setSn(SnUtil.buildProductSn());
                 }
+				snService.save(sn);
+			}else
+			{
 				snService.save(sn);
 			}
 		} catch (Exception e) {

@@ -15,7 +15,7 @@
     			//2、校验 
     			$.ajax({
     				url:"${basePath}wms/storagebin_verify.action",
-    				data: {"storageBin.name": name,"storageBin.storeName":storage},
+    				data: {"storageBin.name": name,"storageBin.storeId":storage},
     				type: "post",
     				async: false,//非异步
     				success: function(msg){

@@ -29,5 +29,11 @@
         <property name="operator" type="java.lang.String">
             <column name="operator" length="32" />
         </property>
+        <property name="inStorageId" type="java.lang.String">
+            <column name="inStorageId" length="32" />
+        </property>
+        <property name="outStorageId" type="java.lang.String">
+            <column name="outStorageId" length="32" />
+        </property>
     </class>
 </hibernate-mapping>

@@ -58,7 +58,7 @@
             </tr>
           
             <input type="text" name="aa" style="display:none"/>
-          <td class="tdBg" width="200px">所属地域：</td>
+          <td class="tdBg" width="200px">所属仓库：</td>
           <td>
            <s:textfield id="storage" name="storageBin.storeName" readonly="true"></s:textfield>
           </td>

@@ -14,8 +14,10 @@ import com.opensymphony.xwork2.ActionContext;
 
 import cn.itcast.base.action.BaseAction;
 import cn.itcast.base.util.QueryHelper;
+import cn.itcast.instorage.entity.WmsForm;
 import cn.itcast.instorage.entity.WmsInventory;
 import cn.itcast.instorage.entity.WmsInventoryBin;
+import cn.itcast.instorage.service.WmsFormService;
 import cn.itcast.instorage.service.WmsInventoryBinService;
 import cn.itcast.instorage.service.WmsInventoryService;
 import cn.itcast.wms.location.entity.WmsLocation;
@@ -37,6 +39,8 @@ public class StorageAction extends BaseAction {
 	private WmsInventoryBinService inventoryBinService;
 	@Resource
 	private WmsInventoryService inventoryService;
+	@Resource
+	private WmsFormService formService;
 	
 	private WmsStorage storage;
 	private WmsStorageBin storageBin;
@@ -133,6 +137,40 @@ public class StorageAction extends BaseAction {
                 	  wi.setStorageName(storage.getName());
                 	  inventoryService.update(wi);
                   }
+                 
+                  
+                  //修改单据表的入库仓库名
+                  QueryHelper query4=new QueryHelper(WmsForm.class,"wf");
+                  query4.addCondition("wf.inStorageId=?", storage.getId());
+                  List<WmsForm> wfs=formService.findObjects(query4);
+                  if(wfs.size()>0)
+                  {               	  
+                	  for(WmsForm wf:wfs)
+                	  {
+                		  wf.setInStorage(storage.getName());
+                		  formService.update(wf);
+                	  }
+                  }
+                  //修改单据表的出库仓库名
+                  QueryHelper query5=new QueryHelper(WmsForm.class,"wf");
+                  query5.addCondition("wf.outStorageId=?", storage.getId());
+                  List<WmsForm> wfss=formService.findObjects(query5);
+                  if(wfss.size()>0)
+                  {
+                	  
+                	  for(WmsForm wff:wfss)
+                	  {
+                		  wff.setOutStorage(storage.getName());
+                		  formService.update(wff);
+                	  }
+                  }
+                  
+                  QueryHelper query6=new QueryHelper(WmsLocation.class,"wl");
+                  query6.addCondition("wl.name=?", storage.getAddress());
+                  List<WmsLocation> wl=locationService.findObjects(query6);
+                  WmsLocation wls=wl.get(0);
+                  storage.setAddressId(wls.getId());
+                  
                     
 					storageService.update(storage);
 				}

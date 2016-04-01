@@ -121,7 +121,36 @@ public class StorageBinAction extends BaseAction {
               	  inventoryBinService.update(wib);
               	  
                 }
+                //保存仓库id
+                QueryHelper query3=new QueryHelper(WmsStorage.class, "ws");
+                query3.addCondition("ws.name=?", storageBin.getStoreName());
+                List<WmsStorage> wss=storageService.findObjects(query3);
+              
+                WmsStorage ws=wss.get(0);
+                storageBin.setStoreId(ws.getId());
+                //修改单据详细表的入库仓位
+                QueryHelper query4=new QueryHelper(WmsFormDetail.class, "wfd");
+                query4.addCondition("wfd.instorageBinCode=?", storageBin.getId());
+                List<WmsFormDetail> wf=formDetailService.findObjects(query4);
+                if(wf.size()>0){
+                  for(WmsFormDetail w:wf)
+                  {
+                	w.setInstorageBinName(storageBin.getName());
+                	formDetailService.update(w);
+                  }
+                }
                 
+                //修改单据详细表的出库仓位
+                QueryHelper query5=new QueryHelper(WmsFormDetail.class, "wfd");
+                query5.addCondition("wfd.outstorageBinCode=?", storageBin.getId());
+                List<WmsFormDetail> wfs=formDetailService.findObjects(query5);
+                if(wfs.size()>0){
+                    for(WmsFormDetail ww:wfs)
+                    {
+                  	ww.setOutstorageBinName(storageBin.getName());
+                  	formDetailService.update(ww);
+                    }
+                  }
               
 				storageBinService.update(storageBin);
 			}
@@ -202,6 +231,9 @@ public class StorageBinAction extends BaseAction {
 		try {
 			//获取仓库名和仓位名
 			if(storageBin != null && StringUtils.isNotBlank(storageBin.getName())){
+				
+				
+				
 				//根据仓库和仓位查询
 				QueryHelper query=new QueryHelper(WmsStorageBin.class,"wl");
 				

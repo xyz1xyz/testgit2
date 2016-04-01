@@ -18,6 +18,8 @@ public class WmsForm implements java.io.Serializable {
 	private Timestamp optime;
 	private String inStorage;
 	private String outStorage;
+	private String inStorageId;
+	private String outStorageId;
 	
 	private String operator;
 	//出库入库类型
@@ -109,5 +111,22 @@ public class WmsForm implements java.io.Serializable {
 	public void setOperator(String operator) {
 		this.operator = operator;
 	}
+
+	public String getInStorageId() {
+		return inStorageId;
+	}
+
+	public void setInStorageId(String inStorageId) {
+		this.inStorageId = inStorageId;
+	}
+
+	public String getOutStorageId() {
+		return outStorageId;
+	}
+
+	public void setOutStorageId(String outStorageId) {
+		this.outStorageId = outStorageId;
+	}
+	
 
 }

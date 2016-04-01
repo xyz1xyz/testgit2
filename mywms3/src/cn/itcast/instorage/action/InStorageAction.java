@@ -102,6 +102,13 @@ public class InStorageAction extends BaseAction {
 		String time=ServletActionContext.getRequest().getParameter("time");
 		form.setOptime(new Timestamp(DateUtils.parseDate(time, "yyyy-MM-dd HH:mm").getTime()));
 		form.setCreateDate(new Timestamp(new Date().getTime()));
+		
+		//设置入库仓库id
+		QueryHelper querys=new QueryHelper(WmsStorage.class, "ws");
+		querys.addCondition("ws.name=?", form.getInStorage());
+		List<WmsStorage>  wss=storageService.findObjects(querys);
+		WmsStorage storage=wss.get(0);
+		form.setInStorageId(storage.getId());
 		//保存单据表
 		wmsFormService.save(form);
 		
